@@ -1,5 +1,6 @@
 import connectDB from "../../db/connection.js";
 import authRouter from "./auth/auth.router.js";
+import msgRouter from "./message/message.router.js";
 import userRouter from "./user/user.router.js";
 
 const initApp =(app,express)=>{
@@ -7,5 +8,6 @@ const initApp =(app,express)=>{
     app.use(express.json());
     app.use('/auth',authRouter);
     app.use('/user',userRouter);
+    app.use('/msg',msgRouter);
 }
 export default initApp;
