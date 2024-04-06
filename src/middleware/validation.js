@@ -1,4 +1,3 @@
-import { signInSchema } from "../modules/auth/auth.validation.js";
 const dataMethods =['body','query','params'];
 const validation = (schema) => {
   return (req, res, next) => {
