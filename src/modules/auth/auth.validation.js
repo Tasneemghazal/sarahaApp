@@ -11,9 +11,6 @@ export const signUpSchema ={
         cPassword:joi.valid(joi.ref('password')).required(),
         age:joi.number().min(20).positive().integer(),
         gender:joi.string().alphanum().valid("male", "female").required(),
-    }),
-    query:joi.object({
-        test:joi.boolean().required()
     })
 
 }
