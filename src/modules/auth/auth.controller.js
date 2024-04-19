@@ -3,11 +3,11 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import SendEmail from "../../services/SendEmail.js";
 
-export const signUp = async (req, res) => {
+export const signUp = async (req, res,next) => {
   const { userName, email, password } = req.body;
   const existUser = await userModel.findOne({ email });
   if (existUser) {
-    return res.status(409).json({ error: "user already exists" });
+    return next(new Error( "user already exists"))
   }
   const hashPassword = await bcrypt.hash(
     password,
@@ -19,7 +19,7 @@ export const signUp = async (req, res) => {
     password: hashPassword,
   });
   if (!user) {
-    return res.status(400).json({ error: "user doesn't created successfully" });
+    return next(new Error("user doesn't created successfully" ));
   }
   const token = await jwt.sign({email},process.env.CONFTOKEN)
   const html = `
@@ -39,11 +39,11 @@ export const signIn = async (req, res) => {
     .findOne({ email })
     .select("userName password confirmEmail");
   if (!existUser) {
-    return res.status(400).json({ error: "user does not  exist" });
+    return next(new Error( "user does not  exist" ));
   }
   const match = await bcrypt.compare(password, existUser.password);
   if (!match) {
-    return res.status(400).json({ message: "invalid password" });
+    return next(new Error( "invalid password" ));
   }
   const token = await jwt.sign({ id: existUser._id }, process.env.SIGNIN_SIG);
   return res.status(200).json({ message: "success", token });
